@@ -7,15 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Visualization & Content Choices: 
-        - Report Text: Presented in themed sections with premium typography and generous spacing. Goal: Inform. Method: HTML, Tailwind.
-        - Tables: Rendered as responsive HTML tables with enhanced styling for clarity and elegance. Goal: Detail, Compare. Method: HTML, Tailwind. Interaction: Scrollable. Justification: Direct and structured data presentation.
-        - Cost Breakdown Chart: Visualized as a Chart.js doughnut chart with a sophisticated color palette. Goal: Summarize, Compare. Method: Chart.js (Canvas). Interaction: Tooltips. Justification: Quick visual understanding of cost distribution.
-        - System Diagram Flow: Represented using structured HTML and text, styled for clarity within the elegant theme. Goal: Illustrate. Method: HTML, Tailwind. Justification: Clear textual representation.
-        - Step-by-Step Guides: Presented as ordered lists with improved visual hierarchy and readability. Goal: Guide. Method: HTML, Tailwind. Justification: Sequential information clarity.
-        - Navigation: Interactive sidebar with smooth transitions and an elegant, modern styling. Goal: Navigate. Method: JS. Justification: Enhanced SPA user experience.
-        - All choices adhere to NO SVG/Mermaid constraints, focusing on HTML, Tailwind, and Chart.js.
-    -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -101,8 +92,14 @@
         h2 { font-size: 1.625rem; line-height: 2.125rem; color: #0f766e; } /* teal-700 */
         h3 { font-size: 1.375rem; line-height: 1.875rem; color: #0d9488; } /* teal-600 */
         p { margin-bottom: 1.25rem; line-height: 1.8; color: #475569; } /* slate-600 */
-        ul, ol { margin-left: 1.25rem; margin-bottom: 1.25rem; color: #475569; padding-left: 0.5rem;}
-        li { margin-bottom: 0.75rem; padding-left: 0.25rem; }
+        
+        ul, ol {
+            margin-bottom: 1.25rem;
+            color: #475569; /* slate-600 */
+        }
+        li {
+            margin-bottom: 0.75rem;
+        }
         ol li::marker { font-weight: 500; color: #0d9488; } /* teal-600 */
         ul li::marker { color: #14b8a6; } /* teal-500 */
 
@@ -210,11 +207,11 @@
                 <p>The conceptual flow of power is designed for efficiency and reliability:</p>
                 <div class="bg-slate-100 p-6 rounded-lg shadow-sm border border-slate-200 my-4">
                     <p class="font-semibold text-teal-700 text-lg mb-3">Power Flow:</p>
-                    <ol class="list-decimal list-inside space-y-2 text-slate-700">
+                    <ol class="list-decimal pl-5 space-y-2 text-slate-700">
                         <li><strong>Solar Panels</strong> &rarr; Solar Combiner Box (if needed) &rarr; <strong>Victron SmartSolar MPPT Charge Controller</strong></li>
                         <li>MPPT Controller &rarr; Main DC Fuse & Disconnect Switch &rarr; <strong>Victron Lynx Distributor</strong> (or equivalent) &rarr; <strong>Battery Bank (LiFePO4)</strong></li>
                         <li>From Lynx Distributor / Busbars:
-                            <ul class="list-disc list-inside ml-5 space-y-1">
+                            <ul class="list-disc pl-5 ml-5 space-y-1">
                                 <li>&rarr; <strong>Victron MultiPlus-II Inverter/Charger</strong> &rarr; RV AC Distribution Panel (120V AC loads)</li>
                                 <li>&rarr; RV DC Fuse Panel (12V DC loads)</li>
                             </ul>
@@ -338,14 +335,14 @@
                 <p><strong>Recommendation: Victron MultiPlus-II 12/3000VA/120-50 (UL version)</strong>. 12V DC, 3000VA (~2400W continuous AC), 120A DC charger. Ample for non-AC loads. Cost: $990-$1088. Features PowerAssist and UPS functionality. Will replace old converters and connect between AC source selector and main AC panel.</p>
 
                 <h2>E. System Monitoring & Control</h2>
-                <ul class="list-disc space-y-1.5">
+                <ul class="list-disc pl-5 space-y-1.5">
                     <li><strong>Victron Cerbo GX:</strong> Communication hub. Cost: $218-$248.</li>
                     <li><strong>Victron GX Touch 50 Display:</strong> Local interface. Cost: $220-$245.</li>
                     <li><strong>Victron SmartShunt 500A:</strong> Accurate battery monitoring. Cost: $100-$104.</li>
                 </ul>
 
                 <h2>F. DC Distribution and Protection</h2>
-                <ul class="list-disc space-y-1.5">
+                <ul class="list-disc pl-5 space-y-1.5">
                     <li><strong>Main Disconnect & Fuse:</strong> Heavy-duty switch (300A+) and 400A Class T fuse for MultiPlus-II.</li>
                     <li><strong>DC Hub: Victron Lynx Distributor</strong> (modular busbar with MEGA fuses). Cost: ~$201. Or heavy-duty busbars with individual fuses.</li>
                     <li><strong>Branch Circuits:</strong> Reuse existing 12V DC panel if suitable, fed from Lynx.</li>
@@ -451,7 +448,7 @@
                 <p>This intensive schedule assumes "Day 0" prep is complete and all materials/tools are ready.</p>
 
                 <h2>Day 0: Crucial Pre-Work (To be done BEFORE the 2-day window)</h2>
-                <ol class="list-decimal space-y-2.5">
+                <ol class="list-decimal pl-5 space-y-2.5">
                     <li><strong>Safety First:</strong> ABSOLUTELY NO WORK ON LIVE CIRCUITS. Disconnect ALL power (shore, generator, old batteries - NEGATIVE FIRST). Cover any existing solar. PPE on. Fire extinguisher ready.</li>
                     <li><strong>Review Existing System:</strong> Familiarize with 1980 Wanderlodge manual. Locate old batteries, converters, AC selector, breaker/fuse panels.</li>
                     <li><strong>Identify & Label Wiring:</strong> Before disconnecting, trace and label ALL wires from old components. Take many photos.</li>
@@ -462,7 +459,7 @@
 
                 <h2>Day 1: Component Mounting and Heavy Gauge Wiring</h2>
                 <h3>Morning (Solar Panel Installation - Approx. 4-5 hours)</h3>
-                <ol class="list-decimal space-y-2.5">
+                <ol class="list-decimal pl-5 space-y-2.5">
                     <li><strong>Prepare Roof Surface:</strong> Clean thoroughly where mounts and cable gland go.</li>
                     <li><strong>Install Solar Panel Mounts:</strong> Locate roof stringers. Secure mounts to them if possible. If Z-brackets, attach to panels first. If tilt, assemble and attach bases. <strong class="text-red-600">Critical Sealing:</strong> Dicor 501LS under mount feet AND over all fasteners/perimeters.</li>
                     <li><strong>Install Roof Cable Entry Gland:</strong> Choose location for drip loop and short internal run. Drill hole(s). Seal gland thoroughly with Dicor.</li>
@@ -470,11 +467,11 @@
                     <li><strong>Run PV Wires:</strong> Route from panels to gland. Make MC4 connections if needed on roof. Pass wires through gland. Seal gland openings. Route wires towards MPPT (DO NOT connect yet).</li>
                 </ol>
                 <h3>Afternoon (Battery and Major DC Component Installation - Approx. 3-4 hours)</h3>
-                <ol class="list-decimal space-y-2.5">
+                <ol class="list-decimal pl-5 space-y-2.5">
                     <li><strong>Install Batteries:</strong> Address compartment opening restriction! Place and secure batteries firmly.</li>
                     <li><strong>Mount Major DC Components:</strong> MultiPlus-II (ventilated, near batteries), SmartSolar MPPT (cool, ventilated, near PV entry & batteries), Lynx Distributor (central), SmartShunt (main negative path), Disconnect Switch & Class T Fuse Holder (main positive path, near battery).</li>
                     <li><strong>Wire Main DC System (Heavy Gauge):</strong> Use correct lugs, hydraulic crimps, heat shrink. Torque to spec.
-                        <ul class="list-disc list-inside ml-5 space-y-1.5">
+                        <ul class="list-disc pl-5 ml-5 space-y-1.5">
                             <li>Battery Interconnects (if parallel): Equal length/gauge cables.</li>
                             <li>Battery Positive Path: Batt Main Pos &rarr; Class T Fuse &rarr; Disconnect Switch &rarr; Lynx Pos Input.</li>
                             <li>Battery Negative Path: Batt Main Neg &rarr; SmartShunt "Batt Minus" &rarr; SmartShunt "System Minus" &rarr; Lynx Neg Input.</li>
@@ -487,9 +484,9 @@
 
                 <h2>Day 2: AC Wiring, Monitoring, and Final Connections</h2>
                 <h3>Morning (AC Wiring and Integration - Approx. 3-4 hours)</h3>
-                <ol class="list-decimal space-y-2.5">
+                <ol class="list-decimal pl-5 space-y-2.5">
                     <li><strong>MultiPlus-II AC Wiring:</strong> All AC power OFF.
-                        <ul class="list-disc list-inside ml-5 space-y-1.5">
+                        <ul class="list-disc pl-5 ml-5 space-y-1.5">
                             <li>AC Input (AC-IN): Route 6 AWG (for 50A) from RV AC source selector/ATS output &rarr; MultiPlus AC-IN (L, N, G).</li>
                             <li>AC Output (AC-OUT1): Route 6 AWG from MultiPlus AC-OUT1 (L, N, G) &rarr; RV main AC panel input.</li>
                             <li>Decommission Old Converter AC Feed: Turn OFF breaker, disconnect wire, make safe.</li>
@@ -499,7 +496,7 @@
                     <li><strong>Verify AC Panel for Inverter Loads:</strong> Confirm all intended circuits are fed by MultiPlus AC-OUT1.</li>
                 </ol>
                 <h3>Afternoon (Monitoring, Low Voltage DC, and Final Checks - Approx. 3-4 hours)</h3>
-                <ol class="list-decimal space-y-2.5">
+                <ol class="list-decimal pl-5 space-y-2.5">
                     <li><strong>Install Monitoring System:</strong> Mount Cerbo GX, GX Touch. Connect MultiPlus (VE.Bus), MPPT (VE.Direct/Can), SmartShunt (VE.Direct) to Cerbo. Connect SoK CANbus (if applicable). Power Cerbo & Touch.</li>
                     <li><strong>Wire Existing 12V DC Loads:</strong> Connect original 12V DC panel feed wire to a fused output on Lynx.</li>
                     <li><strong>Final Wiring Checks:</strong> Meticulously double-check ALL connections for tightness & polarity. Inspect wire routing for protection. Confirm correct fuses installed.</li>
@@ -512,7 +509,7 @@
                 <p>Systematic testing ensures correct and safe operation.</p>
 
                 <h2>A. Initial Power-Up Sequence</h2>
-                <ol class="list-decimal space-y-2.5">
+                <ol class="list-decimal pl-5 space-y-2.5">
                     <li><strong>Final Visual Inspection:</strong> Check all wiring, connections, no loose tools.</li>
                     <li><strong>Power Up Batteries:</strong> Main disconnect OFF. DC load breakers OFF. Turn ON main disconnect. Check SmartShunt/Cerbo for battery voltage.</li>
                     <li><strong>Power Up DC System:</strong> Turn ON DC breakers one by one. Test each DC load.</li>
@@ -530,7 +527,7 @@
                 <p>On inverter power, test AC appliances. Monitor battery voltage, inverter load, battery discharge current. Do not exceed inverter rating.</p>
 
                 <h2>E. Testing Shore Power Passthrough and Charging</h2>
-                <ol class="list-decimal space-y-2.5">
+                <ol class="list-decimal pl-5 space-y-2.5">
                     <li>MultiPlus to "Charger Only" or "On".</li>
                     <li>Connect shore power/start generator.</li>
                     <li>MultiPlus should detect AC input, pass through to AC panel.</li>
@@ -546,7 +543,7 @@
                         <p class="text-sm mb-0">Use VictronConnect or GX Touch. Incorrect settings can damage batteries or reduce lifespan.</p>
                     </div>
                 </div>
-                <ul class="list-disc space-y-1.5">
+                <ul class="list-disc pl-5 space-y-1.5">
                     <li><strong>Battery Settings (MultiPlus & MPPT):</strong> Correct total capacity, "LiFePO4" chemistry, precise charge voltages (Bulk/Absorb, Float) per SoK specs. If CANbus connected, BMS may control this.</li>
                     <li><strong>MultiPlus Settings:</strong> Input current limits for shore, PowerAssist, UPS function.</li>
                     <li><strong>SmartShunt Settings:</strong> Match battery capacity.</li>
@@ -597,7 +594,7 @@
 
 
                 <h2>B. Tips for Sourcing Materials Online</h2>
-                <ul class="list-disc space-y-1.5">
+                <ul class="list-disc pl-5 space-y-1.5">
                     <li><strong>Compare Prices:</strong> Use multiple vendors (Amazon, InvertersRUs, Bay Marine Supply, Battle Born, ShopSolarKits, WireAndCableYourWay, Home Depot, Lowes).</li>
                     <li><strong>Check Shipping & Returns:</strong> Factor in costs for heavy items. Understand return policies.</li>
                     <li><strong>Order in Advance:</strong> Crucial for the 2-day install. Account for shipping/processing times.</li>
@@ -617,7 +614,7 @@
                     <span class="icon text-xl">❗</span>
                     <div>
                         <h3 class="font-semibold mt-0">Safety is Paramount!</h3>
-                        <ul class="list-disc space-y-1 text-sm mb-0">
+                        <ul class="list-disc pl-5 space-y-1 text-sm mb-0">
                             <li><strong>Electricity is Dangerous:</strong> Consult a qualified professional if uncertain.</li>
                             <li><strong>De-energize All Circuits:</strong> Verify OFF with a multimeter.</li>
                             <li><strong>Proper Fusing is Non-Negotiable:</strong> Protects wiring and components.</li>
@@ -628,7 +625,7 @@
                 </div>
 
                 <h2>B. System Maintenance Recommendations</h2>
-                <ul class="list-disc space-y-1.5">
+                <ul class="list-disc pl-5 space-y-1.5">
                     <li><strong>Connections:</strong> Inspect high-current connections for tightness/corrosion every 6-12 months.</li>
                     <li><strong>Solar Panels:</strong> Clean regularly to remove dirt/debris.</li>
                     <li><strong>Battery Terminals:</strong> Visual inspection.</li>
@@ -637,7 +634,7 @@
                 </ul>
 
                 <h2>C. Troubleshooting Common Issues</h2>
-                <ul class="list-disc space-y-1.5">
+                <ul class="list-disc pl-5 space-y-1.5">
                     <li><strong>No DC Power:</strong> Check disconnect, main fuse, battery SoC, connections, DC breakers.</li>
                     <li><strong>No AC Power from Inverter:</strong> Check inverter ON, battery SoC/voltage, DC input fuse, fault codes, AC output breakers.</li>
                     <li><strong>Low Solar Charging:</strong> Check shading, panel cleanliness, PV wiring, MPPT settings, PV fuse/breaker.</li>
@@ -645,7 +642,7 @@
                 </ul>
 
                 <h2>D. Future Expansion Possibilities</h2>
-                <ul class="list-disc space-y-1.5">
+                <ul class="list-disc pl-5 space-y-1.5">
                     <li><strong>Solar Array Expansion:</strong> Add panels if space/MPPT capacity allows (150/100 can handle >1200W). May need 2nd MPPT.</li>
                     <li><strong>Battery Bank Expansion:</strong> Add identical LiFePO4 batteries in parallel. Ensure charging system can handle it.</li>
                     <li><strong>Other Victron Accessories:</strong> DC-DC chargers (Orion-Tr Smart), sensors, etc.</li>
@@ -666,10 +663,10 @@
                 <p>This report outlines a comprehensive plan for a Victron-focused off-grid power system overhaul for your 1980 Bluebird Wanderlodge, excluding AC units from off-grid loads. Revised daily energy use is ~171 Ah (design target ~205 Ah).</p>
 
                 <h2 class="text-teal-700">Key Recommendations:</h2>
-                <ol class="list-decimal space-y-3.5 font-medium">
+                <ol class="list-decimal pl-5 space-y-3.5 font-medium">
                     <li class="text-rose-600">Prioritize Battery Fitment Verification: <span class="font-normal text-slate-600">The reported 5" compartment opening restriction is critical. Re-measure before any battery purchase.</span></li>
                     <li>System Sizing:
-                        <ul class="list-disc list-inside font-normal text-slate-600 space-y-1.5 ml-5">
+                        <ul class="list-disc pl-5 ml-5 font-normal text-slate-600 space-y-1.5">
                             <li>Battery Bank: ~515-600 Ah LiFePO4 (e.g., 2x SoK SK12V314PH if they fit).</li>
                             <li>Solar Array: 1000W-1200W (e.g., 3x 400W panels). Consider tilt mounts.</li>
                             <li>Charge Controller: Victron SmartSolar MPPT 150/100-Tr.</li>
