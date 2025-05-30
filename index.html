@@ -6,14 +6,14 @@
     <title>RV Off-Grid Power System Plan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Visualization & Content Choices: 
-        - Report Text: Presented in themed sections with clear, modern typography. Goal: Inform. Method: HTML, Tailwind.
-        - Tables: Rendered as responsive HTML tables with updated styling for better readability. Goal: Detail, Compare. Method: HTML, Tailwind. Interaction: Scrollable. Justification: Direct and structured data presentation.
-        - Cost Breakdown Chart: Visualized as a Chart.js pie chart with a refined color palette. Goal: Summarize, Compare. Method: Chart.js (Canvas). Interaction: Tooltips. Justification: Quick visual understanding of cost distribution.
-        - System Diagram Flow: Represented using structured HTML and text, styled for clarity. Goal: Illustrate. Method: HTML, Tailwind. Justification: Clear textual representation.
-        - Step-by-Step Guides: Presented as ordered lists with improved visual hierarchy. Goal: Guide. Method: HTML, Tailwind. Justification: Sequential information clarity.
-        - Navigation: Interactive sidebar with smoother transitions and modern styling. Goal: Navigate. Method: JS. Justification: Enhanced SPA user experience.
+        - Report Text: Presented in themed sections with premium typography and generous spacing. Goal: Inform. Method: HTML, Tailwind.
+        - Tables: Rendered as responsive HTML tables with enhanced styling for clarity and elegance. Goal: Detail, Compare. Method: HTML, Tailwind. Interaction: Scrollable. Justification: Direct and structured data presentation.
+        - Cost Breakdown Chart: Visualized as a Chart.js doughnut chart with a sophisticated color palette. Goal: Summarize, Compare. Method: Chart.js (Canvas). Interaction: Tooltips. Justification: Quick visual understanding of cost distribution.
+        - System Diagram Flow: Represented using structured HTML and text, styled for clarity within the elegant theme. Goal: Illustrate. Method: HTML, Tailwind. Justification: Clear textual representation.
+        - Step-by-Step Guides: Presented as ordered lists with improved visual hierarchy and readability. Goal: Guide. Method: HTML, Tailwind. Justification: Sequential information clarity.
+        - Navigation: Interactive sidebar with smooth transitions and an elegant, modern styling. Goal: Navigate. Method: JS. Justification: Enhanced SPA user experience.
         - All choices adhere to NO SVG/Mermaid constraints, focusing on HTML, Tailwind, and Chart.js.
     -->
     <style>
@@ -21,6 +21,7 @@
             font-family: 'Inter', sans-serif;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            background-color: #f8fafc; /* slate-50 */
         }
         ::-webkit-scrollbar {
             width: 8px;
@@ -39,124 +40,165 @@
         }
         .content-section {
             display: none;
-            animation: fadeIn 0.5s ease-in-out;
+            animation: fadeInStagger 0.6s ease-out forwards;
         }
         .content-section.active {
             display: block;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes fadeInStagger {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .nav-link {
             cursor: pointer;
-            padding: 0.875rem 1.5rem; /* 14px 24px */
-            border-radius: 0.5rem; /* rounded-lg */
-            transition: all 0.2s ease-in-out;
+            padding: 0.875rem 1.5rem; 
+            border-radius: 0.375rem; /* rounded-md */
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 500;
             color: #475569; /* slate-600 */
+            display: flex;
+            align-items: center;
+            gap: 0.75rem; /* space-x-3 */
         }
         .nav-link:hover {
-            background-color: #eef2ff; /* indigo-50 */
-            color: #4338ca; /* indigo-700 */
+            background-color: #f0f9ff; /* sky-50 */
+            color: #0f766e; /* teal-700 */
+            transform: translateX(4px);
         }
         .nav-link.active {
-            background-color: #4f46e5; /* indigo-600 */
+            background-color: #14b8a6; /* teal-500 */
             color: white;
             font-weight: 600;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 14px -2px rgba(20, 184, 166, 0.4);
+        }
+        .nav-link.active .icon {
+             filter: brightness(0) invert(1);
         }
         .table-container {
-            max-height: 450px;
+            max-height: 500px;
             overflow-y: auto;
-            border: 1px solid #cbd5e1; /* slate-300 */
+            border: 1px solid #e2e8f0; /* slate-200 */
             border-radius: 0.5rem; /* rounded-lg */
-            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03);
         }
         .chart-container {
             position: relative;
             width: 100%;
-            max-width: 480px; 
+            max-width: 420px; 
             margin-left: auto;
             margin-right: auto;
-            height: 320px; 
-            max-height: 380px;
+            height: 300px; 
+            max-height: 360px;
         }
         @media (min-width: 768px) {
             .chart-container {
-                height: 350px;
-                max-height: 400px;
+                height: 330px;
+                max-height: 380px;
             }
         }
-        h1, h2, h3 { margin-bottom: 0.75em; margin-top: 1.25em; font-weight: 700; letter-spacing: -0.025em; }
-        h1 { font-size: 2.25rem; line-height: 2.5rem; color: #1e293b; } /* text-4xl slate-800 */
-        h2 { font-size: 1.875rem; line-height: 2.25rem; color: #334155; } /* text-3xl slate-700 */
-        h3 { font-size: 1.5rem; line-height: 2rem; color: #475569; } /* text-2xl slate-600 */
-        p { margin-bottom: 1.25rem; line-height: 1.75; color: #475569; } /* slate-600 */
-        ul, ol { margin-left: 1.5rem; margin-bottom: 1.25rem; color: #475569; }
-        li { margin-bottom: 0.625rem; }
+        h1, h2, h3 { margin-bottom: 0.8em; margin-top: 1.3em; font-weight: 700; letter-spacing: -0.02em; }
+        h1 { font-size: 2rem; line-height: 2.6rem; color: #1e293b; } /* slate-800 */
+        h2 { font-size: 1.625rem; line-height: 2.125rem; color: #0f766e; } /* teal-700 */
+        h3 { font-size: 1.375rem; line-height: 1.875rem; color: #0d9488; } /* teal-600 */
+        p { margin-bottom: 1.25rem; line-height: 1.8; color: #475569; } /* slate-600 */
+        ul, ol { margin-left: 1.25rem; margin-bottom: 1.25rem; color: #475569; padding-left: 0.5rem;}
+        li { margin-bottom: 0.75rem; padding-left: 0.25rem; }
+        ol li::marker { font-weight: 500; color: #0d9488; } /* teal-600 */
+        ul li::marker { color: #14b8a6; } /* teal-500 */
+
         table { width: 100%; border-collapse: separate; border-spacing: 0; }
-        th, td { border-bottom: 1px solid #e2e8f0; padding: 1rem; text-align: left; font-size: 0.875rem; } /* slate-200 */
-        th { background-color: #f8fafc; color: #1e293b; font-weight: 600; border-top: 1px solid #e2e8f0;} /* slate-50, slate-800 */
-        td { color: #334155; } /* slate-700 */
-        tbody tr:hover { background-color: #f1f5f9; } /* slate-100 */
+        th, td { border-bottom: 1px solid #f1f5f9; padding: 1rem 1.25rem; text-align: left; font-size: 0.9rem; } /* slate-100 */
+        th { background-color: #f8fafc; color: #334155; font-weight: 600; border-top: 1px solid #f1f5f9;} /* slate-50, slate-700 */
+        td { color: #475569; } /* slate-600 */
+        tbody tr:hover { background-color: #f0f9ff; } /* sky-50 */
+        
         .badge {
             display: inline-block;
-            padding: 0.35em 0.75em;
-            font-size: 0.75em;
+            padding: 0.4em 0.8em;
+            font-size: 0.75rem;
             font-weight: 600;
             line-height: 1;
             text-align: center;
             white-space: nowrap;
             vertical-align: baseline;
-            border-radius: 0.375rem; /* rounded-md */
+            border-radius: 9999px; /* rounded-full */
         }
         .badge-critical {
-            color: #fff;
-            background-color: #e11d48; /* rose-600 */
+            color: #be123c; /* rose-700 */
+            background-color: #ffe4e6; /* rose-100 */
+            border: 1px solid #fda4af; /* rose-300 */
         }
         .badge-info {
-            color: #fff;
-            background-color: #4f46e5; /* indigo-600 */
+            color: #1d4ed8; /* blue-700 */
+            background-color: #dbeafe; /* blue-100 */
+            border: 1px solid #93c5fd; /* blue-300 */
         }
         .icon {
             display: inline-block;
-            width: 1.1em;
-            height: 1.1em;
-            margin-right: 0.5em;
-            vertical-align: -0.15em;
+            width: 1.25em;
+            height: 1.25em;
+            vertical-align: -0.2em;
+            flex-shrink: 0;
         }
         .card {
             background-color: white;
-            padding: 1.5rem;
+            padding: 2rem; /* Increased padding */
             border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1); /* shadow-lg */
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -4px rgba(0,0,0,0.05); /* Softer shadow */
+            border: 1px solid #e2e8f0; /* slate-200 */
+            margin-bottom: 1.5rem; /* Space between cards */
         }
+        .alert-box {
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        .alert-box .icon { margin-top: 0.125rem; }
+        .alert-critical {
+            background-color: #fff1f2; /* rose-50 */
+            border: 1px solid #ffdde0; /* rose-200 */
+            color: #c01431; /* rose-700 */
+        }
+        .alert-info {
+            background-color: #eff6ff; /* blue-50 */
+            border: 1px solid #dbeafe; /* blue-200 */
+            color: #1e40af; /* blue-800 */
+        }
+         .alert-warning {
+            background-color: #fffbeb; /* amber-50 */
+            border: 1px solid #fef3c7; /* amber-200 */
+            color: #b45309; /* amber-700 */
+        }
+
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800">
+<body class="bg-slate-100 text-slate-700">
     <div class="flex flex-col md:flex-row min-h-screen">
-        <nav class="md:w-72 bg-white p-5 space-y-2 shadow-xl md:sticky md:top-0 md:h-screen overflow-y-auto border-r border-slate-200">
-            <div class="mb-6 pb-3 border-b border-slate-200">
-                <h2 class="text-2xl font-bold text-indigo-700 flex items-center">
+        <nav class="md:w-80 bg-white p-6 space-y-2.5 shadow-lg md:sticky md:top-0 md:h-screen overflow-y-auto border-r border-slate-200">
+            <div class="mb-8 pb-4 border-b border-slate-200">
+                <h2 class="text-2xl font-bold text-teal-600 flex items-center gap-2">
                     <span class="icon text-3xl">💡</span>RV Power Plan
                 </h2>
             </div>
-            <a class="nav-link block flex items-center" data-target="overview"> <span class="icon">🏠</span>Overview</a>
-            <a class="nav-link block flex items-center" data-target="power-needs"> <span class="icon">⚡️</span>Power Needs</a>
-            <a class="nav-link block flex items-center" data-target="system-components"> <span class="icon">⚙️</span>System Components</a>
-            <a class="nav-link block flex items-center" data-target="materials-tools"> <span class="icon">🛠️</span>Materials & Tools</a>
-            <a class="nav-link block flex items-center" data-target="installation-plan"> <span class="icon">🔩</span>Installation Plan</a>
-            <a class="nav-link block flex items-center" data-target="testing-commissioning"> <span class="icon">🧪</span>Testing & Commissioning</a>
-            <a class="nav-link block flex items-center" data-target="costs-budgeting"> <span class="icon">💰</span>Costs & Budgeting</a>
-            <a class="nav-link block flex items-center" data-target="additional-info"> <span class="icon">ℹ️</span>Additional Info</a>
-            <a class="nav-link block flex items-center" data-target="conclusion"> <span class="icon">🏁</span>Conclusion</a>
+            <a class="nav-link" data-target="overview"> <span class="icon">🏠</span>Overview</a>
+            <a class="nav-link" data-target="power-needs"> <span class="icon">⚡️</span>Power Needs</a>
+            <a class="nav-link" data-target="system-components"> <span class="icon">⚙️</span>System Components</a>
+            <a class="nav-link" data-target="materials-tools"> <span class="icon">🛠️</span>Materials & Tools</a>
+            <a class="nav-link" data-target="installation-plan"> <span class="icon">🔩</span>Installation Plan</a>
+            <a class="nav-link" data-target="testing-commissioning"> <span class="icon">🧪</span>Testing & Commissioning</a>
+            <a class="nav-link" data-target="costs-budgeting"> <span class="icon">💰</span>Costs & Budgeting</a>
+            <a class="nav-link" data-target="additional-info"> <span class="icon">ℹ️</span>Additional Info</a>
+            <a class="nav-link" data-target="conclusion"> <span class="icon">🏁</span>Conclusion</a>
         </nav>
 
         <main class="flex-1 p-6 md:p-10 bg-slate-50 overflow-y-auto">
             <section id="overview" class="content-section card">
                 <h1>Off-Grid Power System Overhaul: 1980 Bluebird Wanderlodge</h1>
-                <p class="text-lg text-slate-500">This interactive guide details a Victron-focused approach to overhauling the off-grid power system for a 1980 Bluebird Wanderlodge RV. It covers project goals, system benefits, understanding the existing setup, and a high-level view of the proposed new system.</p>
+                <p class="text-lg text-slate-600">This interactive guide details a Victron-focused approach to overhauling the off-grid power system for a 1980 Bluebird Wanderlodge RV. It covers project goals, system benefits, understanding the existing setup, and a high-level view of the proposed new system.</p>
 
                 <h2>Project Goals and Scope</h2>
                 <p>The primary objective is to design and detail the installation of a robust and reliable electrical system, prioritizing Victron Energy components. Air conditioning units are excluded from the off-grid electrical loads. The project aims for a DIY installation within a two-day timeframe, requiring meticulous preparation.</p>
@@ -166,8 +208,8 @@
                 
                 <h2>High-Level Diagram of New Power System</h2>
                 <p>The conceptual flow of power is designed for efficiency and reliability:</p>
-                <div class="bg-slate-100 p-6 rounded-lg shadow-inner border border-slate-200">
-                    <p class="font-semibold text-indigo-700 text-lg mb-3">Power Flow:</p>
+                <div class="bg-slate-100 p-6 rounded-lg shadow-sm border border-slate-200 my-4">
+                    <p class="font-semibold text-teal-700 text-lg mb-3">Power Flow:</p>
                     <ol class="list-decimal list-inside space-y-2 text-slate-700">
                         <li><strong>Solar Panels</strong> &rarr; Solar Combiner Box (if needed) &rarr; <strong>Victron SmartSolar MPPT Charge Controller</strong></li>
                         <li>MPPT Controller &rarr; Main DC Fuse & Disconnect Switch &rarr; <strong>Victron Lynx Distributor</strong> (or equivalent) &rarr; <strong>Battery Bank (LiFePO4)</strong></li>
@@ -188,9 +230,12 @@
             <section id="power-needs" class="content-section card">
                 <h1>Power Needs Assessment (Revised)</h1>
                 <p>This section details the revised daily energy consumption, excluding air conditioning, based on your provided load data. An inverter efficiency of 90% is assumed for AC loads.</p>
-                <div class="bg-rose-50 p-4 rounded-lg border border-rose-200 my-4">
-                    <p class="font-semibold text-rose-700"><span class="icon">⚠️</span>Crucial Note on Fridge:</p>
-                    <p class="text-rose-600 text-sm">The original fridge data (12V, 12A, 144W/h, 24hrs) is ambiguous. If it's an absorption fridge run on propane, electrical draw is minimal. If it's a 12V compressor or run on its 12V electric element, draw is significant. A conservative 75Ah/day for an efficient 12V compressor fridge is used here. <strong class="font-bold">Please verify your actual fridge specifications.</strong></p>
+                <div class="alert-box alert-critical">
+                    <span class="icon text-xl">⚠️</span>
+                    <div>
+                        <p class="font-semibold">Crucial Note on Fridge:</p>
+                        <p class="text-sm mb-0">The original fridge data (12V, 12A, 144W/h, 24hrs) is ambiguous. If it's an absorption fridge run on propane, electrical draw is minimal. If it's a 12V compressor or run on its 12V electric element, draw is significant. A conservative 75Ah/day for an efficient 12V compressor fridge is used here. <strong class="font-bold">Please verify your actual fridge specifications.</strong></p>
+                    </div>
                 </div>
                 
                 <h3>Table 1: Revised Daily Power Consumption Audit (Excluding Air Conditioning)</h3>
@@ -198,16 +243,16 @@
                     <table class="min-w-full">
                         <thead class="bg-slate-100">
                             <tr>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Area</th>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Device</th>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Load Type</th>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Watts (W)</th>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Hours/Day</th>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Daily Wh</th>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Daily Ah @ 12V</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Area</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Device</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Load Type</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Watts (W)</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Hours/Day</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Daily Wh</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Daily Ah @ 12V</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-slate-200">
+                        <tbody class="bg-white divide-y divide-slate-100">
                             <tr><td>Den</td><td>Lights - spot</td><td>DC</td><td>2.5</td><td>4</td><td>10</td><td>0.8</td></tr>
                             <tr><td>Galley</td><td>Outlets - Electric kettle</td><td>AC</td><td>1200</td><td>0.1</td><td>120</td><td>11.1</td></tr>
                             <tr><td>Galley</td><td>Outlets - Microwave</td><td>AC</td><td>900</td><td>0.1</td><td>90</td><td>8.3</td></tr>
@@ -234,11 +279,11 @@
                         </tbody>
                     </table>
                 </div>
-                <p class="mt-6 text-lg"><strong>Total Revised Daily Consumption: <span class="text-indigo-600 font-semibold">171.0 Ah @ 12V</span> (approx. 2052 Wh/day)</strong></p>
+                <p class="mt-6 text-lg"><strong>Total Revised Daily Consumption: <span class="text-teal-600 font-semibold">171.0 Ah @ 12V</span> (approx. 2052 Wh/day)</strong></p>
 
                 <h2 class="mt-6">Accounting for System Losses and Safety Margin</h2>
                 <p>A 20% safety margin is applied to the calculated total to account for system losses and to avoid deep battery discharge:</p>
-                <p class="text-lg">Design Daily Ah Requirement = 171.0 Ah × 1.20 = <strong class="text-indigo-600 font-semibold">205.2 Ah</strong></p>
+                <p class="text-lg">Design Daily Ah Requirement = 171.0 Ah × 1.20 = <strong class="text-teal-600 font-semibold">205.2 Ah</strong></p>
                 <p>This 205 Ah figure will be used for sizing the battery bank and solar array.</p>
             </section>
 
@@ -248,14 +293,17 @@
 
                 <h2>A. Battery Bank (LiFePO4)</h2>
                 <p>LiFePO4 batteries are recommended for their long cycle life, deep discharge capability, lighter weight, and safety.</p>
-                <p><strong>Required Capacity:</strong> Based on 205 Ah daily need, 2 days autonomy, and 80% max DoD: (205 Ah * 2 days) / 0.80 = <strong class="text-indigo-600 font-semibold">512.5 Ah</strong>. Target: 515-600 Ah.</p>
+                <p><strong>Required Capacity:</strong> Based on 205 Ah daily need, 2 days autonomy, and 80% max DoD: (205 Ah * 2 days) / 0.80 = <strong class="text-teal-600 font-semibold">512.5 Ah</strong>. Target: 515-600 Ah.</p>
                 
-                <div class="bg-red-50 p-4 rounded-lg border border-red-300 my-4">
-                    <h3 class="mt-0 text-red-700 font-semibold flex items-center"><span class="icon text-xl">⚠️</span> Critical Consideration: Battery Compartment Access!</h3>
-                    <p class="text-red-600 text-sm">The report highlights a potential "Opening Restriction: 24"L x 5"W". This is a MAJOR constraint. The recommended SoK SK12V314PH (17"L x 9.4"W x 10.9"H) and similar models WILL NOT FIT if this 5" width is accurate.
-                        <strong class="block mt-2">Action Required: Meticulously re-measure the smallest access point (width AND height) to your battery compartment. This is the absolute first step before purchasing any batteries.</strong>
-                        If the 5" restriction is firm, you'll need to find multiple smaller LiFePO4 batteries that can fit or consider relocating the entire battery bank.
-                    </p>
+                <div class="alert-box alert-critical">
+                    <span class="icon text-xl">⚠️</span>
+                    <div>
+                        <h3 class="mt-0 font-semibold">Critical Consideration: Battery Compartment Access!</h3>
+                        <p class="text-sm mb-0">The report highlights a potential "Opening Restriction: 24"L x 5"W". This is a MAJOR constraint. The recommended SoK SK12V314PH (17"L x 9.4"W x 10.9"H) and similar models WILL NOT FIT if this 5" width is accurate.
+                            <strong class="block mt-2">Action Required: Meticulously re-measure the smallest access point (width AND height) to your battery compartment. This is the absolute first step before purchasing any batteries.</strong>
+                            If the 5" restriction is firm, you'll need to find multiple smaller LiFePO4 batteries that can fit or consider relocating the entire battery bank.
+                        </p>
+                    </div>
                 </div>
                 
                 <h3>Table 2: Recommended Battery Options (Illustrative - Pending Fitment Verification)</h3>
@@ -270,7 +318,7 @@
                 </div>
 
                 <h2>B. Solar Array</h2>
-                <p>Middletown, CA averages ~4.5 Peak Sun Hours (PSH) conservatively. Required Solar Watts = (205 Ah * 12.8V) / 4.5 PSH / 0.80 efficiency = <strong class="text-indigo-600 font-semibold">~729W</strong>. Aim for 800W-1200W for resilience.</p>
+                <p>Middletown, CA averages ~4.5 Peak Sun Hours (PSH) conservatively. Required Solar Watts = (205 Ah * 12.8V) / 4.5 PSH / 0.80 efficiency = <strong class="text-teal-600 font-semibold">~729W</strong>. Aim for 800W-1200W for resilience.</p>
                 <p><strong>Recommendation:</strong> Three 380W-400W monocrystalline panels (1140W-1200W total). Mount securely to roof stringers, sealing all penetrations with Dicor 501LS. Consider adjustable tilt mounts for better winter harvest.</p>
                 <h3>Table 3: Solar Array Example (3x 400W Panels, Parallel for 12V System)</h3>
                 <div class="table-container my-4">
@@ -290,14 +338,14 @@
                 <p><strong>Recommendation: Victron MultiPlus-II 12/3000VA/120-50 (UL version)</strong>. 12V DC, 3000VA (~2400W continuous AC), 120A DC charger. Ample for non-AC loads. Cost: $990-$1088. Features PowerAssist and UPS functionality. Will replace old converters and connect between AC source selector and main AC panel.</p>
 
                 <h2>E. System Monitoring & Control</h2>
-                <ul class="list-disc space-y-1">
+                <ul class="list-disc space-y-1.5">
                     <li><strong>Victron Cerbo GX:</strong> Communication hub. Cost: $218-$248.</li>
                     <li><strong>Victron GX Touch 50 Display:</strong> Local interface. Cost: $220-$245.</li>
                     <li><strong>Victron SmartShunt 500A:</strong> Accurate battery monitoring. Cost: $100-$104.</li>
                 </ul>
 
                 <h2>F. DC Distribution and Protection</h2>
-                <ul class="list-disc space-y-1">
+                <ul class="list-disc space-y-1.5">
                     <li><strong>Main Disconnect & Fuse:</strong> Heavy-duty switch (300A+) and 400A Class T fuse for MultiPlus-II.</li>
                     <li><strong>DC Hub: Victron Lynx Distributor</strong> (modular busbar with MEGA fuses). Cost: ~$201. Or heavy-duty busbars with individual fuses.</li>
                     <li><strong>Branch Circuits:</strong> Reuse existing 12V DC panel if suitable, fed from Lynx.</li>
@@ -326,7 +374,7 @@
 
             <section id="materials-tools" class="content-section card">
                 <h1>Materials and Tools List</h1>
-                <p>A comprehensive list for a smooth installation. Online ordering is preferred for many items.</p>
+                <p>A comprehensive list for a smooth installation. Online ordering is preferred for many items. This section includes crucial items like terminals, connectors, crimpers, and heat shrink.</p>
 
                 <h2>A. Materials (Detailed Shopping List)</h2>
                 <h3>Table 5: Detailed Materials List</h3>
@@ -358,14 +406,14 @@
                             <tr><td>Battery Disconnect Switch</td><td>Blue Sea e-Series (350A+)</td><td>1</td><td>$50.00</td><td>$50.00</td></tr>
                             <tr><td>Labels</td><td>For wires, fuses</td><td>1 set</td><td>$10.00</td><td>$10.00</td></tr>
                             <tr class="font-semibold bg-slate-100"><td>Subtotal (Excl. Major)</td><td></td><td></td><td></td><td>~$1000 - $1100</td></tr>
-                            <tr class="font-bold text-lg bg-indigo-100 text-indigo-800"><td>Estimated Grand Total</td><td></td><td></td><td></td><td>~$4500 - $5600</td></tr>
+                            <tr class="font-bold text-lg bg-teal-50 text-teal-800"><td>Estimated Grand Total</td><td></td><td></td><td></td><td>~$4500 - $5600</td></tr>
                         </tbody>
                     </table>
                 </div>
                 <p class="text-xs mt-2 text-slate-500">Excludes tools, shipping, taxes. User to verify all quantities and prices.</p>
 
                 <h2>B. Tools</h2>
-                <h3>Table 6: Recommended Tools List</h3>
+                <h3>Table 6: Recommended Tools List (Includes Crimpers)</h3>
                 <div class="table-container my-4">
                     <table>
                         <thead><tr><th>Tool</th><th>Description/Purpose</th><th>Est. Purchase Cost (if needed)</th></tr></thead>
@@ -403,7 +451,7 @@
                 <p>This intensive schedule assumes "Day 0" prep is complete and all materials/tools are ready.</p>
 
                 <h2>Day 0: Crucial Pre-Work (To be done BEFORE the 2-day window)</h2>
-                <ol class="list-decimal space-y-2">
+                <ol class="list-decimal space-y-2.5">
                     <li><strong>Safety First:</strong> ABSOLUTELY NO WORK ON LIVE CIRCUITS. Disconnect ALL power (shore, generator, old batteries - NEGATIVE FIRST). Cover any existing solar. PPE on. Fire extinguisher ready.</li>
                     <li><strong>Review Existing System:</strong> Familiarize with 1980 Wanderlodge manual. Locate old batteries, converters, AC selector, breaker/fuse panels.</li>
                     <li><strong>Identify & Label Wiring:</strong> Before disconnecting, trace and label ALL wires from old components. Take many photos.</li>
@@ -414,7 +462,7 @@
 
                 <h2>Day 1: Component Mounting and Heavy Gauge Wiring</h2>
                 <h3>Morning (Solar Panel Installation - Approx. 4-5 hours)</h3>
-                <ol class="list-decimal space-y-2">
+                <ol class="list-decimal space-y-2.5">
                     <li><strong>Prepare Roof Surface:</strong> Clean thoroughly where mounts and cable gland go.</li>
                     <li><strong>Install Solar Panel Mounts:</strong> Locate roof stringers. Secure mounts to them if possible. If Z-brackets, attach to panels first. If tilt, assemble and attach bases. <strong class="text-red-600">Critical Sealing:</strong> Dicor 501LS under mount feet AND over all fasteners/perimeters.</li>
                     <li><strong>Install Roof Cable Entry Gland:</strong> Choose location for drip loop and short internal run. Drill hole(s). Seal gland thoroughly with Dicor.</li>
@@ -422,11 +470,11 @@
                     <li><strong>Run PV Wires:</strong> Route from panels to gland. Make MC4 connections if needed on roof. Pass wires through gland. Seal gland openings. Route wires towards MPPT (DO NOT connect yet).</li>
                 </ol>
                 <h3>Afternoon (Battery and Major DC Component Installation - Approx. 3-4 hours)</h3>
-                <ol class="list-decimal space-y-2">
+                <ol class="list-decimal space-y-2.5">
                     <li><strong>Install Batteries:</strong> Address compartment opening restriction! Place and secure batteries firmly.</li>
                     <li><strong>Mount Major DC Components:</strong> MultiPlus-II (ventilated, near batteries), SmartSolar MPPT (cool, ventilated, near PV entry & batteries), Lynx Distributor (central), SmartShunt (main negative path), Disconnect Switch & Class T Fuse Holder (main positive path, near battery).</li>
                     <li><strong>Wire Main DC System (Heavy Gauge):</strong> Use correct lugs, hydraulic crimps, heat shrink. Torque to spec.
-                        <ul class="list-disc list-inside ml-5 space-y-1">
+                        <ul class="list-disc list-inside ml-5 space-y-1.5">
                             <li>Battery Interconnects (if parallel): Equal length/gauge cables.</li>
                             <li>Battery Positive Path: Batt Main Pos &rarr; Class T Fuse &rarr; Disconnect Switch &rarr; Lynx Pos Input.</li>
                             <li>Battery Negative Path: Batt Main Neg &rarr; SmartShunt "Batt Minus" &rarr; SmartShunt "System Minus" &rarr; Lynx Neg Input.</li>
@@ -439,9 +487,9 @@
 
                 <h2>Day 2: AC Wiring, Monitoring, and Final Connections</h2>
                 <h3>Morning (AC Wiring and Integration - Approx. 3-4 hours)</h3>
-                <ol class="list-decimal space-y-2">
+                <ol class="list-decimal space-y-2.5">
                     <li><strong>MultiPlus-II AC Wiring:</strong> All AC power OFF.
-                        <ul class="list-disc list-inside ml-5 space-y-1">
+                        <ul class="list-disc list-inside ml-5 space-y-1.5">
                             <li>AC Input (AC-IN): Route 6 AWG (for 50A) from RV AC source selector/ATS output &rarr; MultiPlus AC-IN (L, N, G).</li>
                             <li>AC Output (AC-OUT1): Route 6 AWG from MultiPlus AC-OUT1 (L, N, G) &rarr; RV main AC panel input.</li>
                             <li>Decommission Old Converter AC Feed: Turn OFF breaker, disconnect wire, make safe.</li>
@@ -451,7 +499,7 @@
                     <li><strong>Verify AC Panel for Inverter Loads:</strong> Confirm all intended circuits are fed by MultiPlus AC-OUT1.</li>
                 </ol>
                 <h3>Afternoon (Monitoring, Low Voltage DC, and Final Checks - Approx. 3-4 hours)</h3>
-                <ol class="list-decimal space-y-2">
+                <ol class="list-decimal space-y-2.5">
                     <li><strong>Install Monitoring System:</strong> Mount Cerbo GX, GX Touch. Connect MultiPlus (VE.Bus), MPPT (VE.Direct/Can), SmartShunt (VE.Direct) to Cerbo. Connect SoK CANbus (if applicable). Power Cerbo & Touch.</li>
                     <li><strong>Wire Existing 12V DC Loads:</strong> Connect original 12V DC panel feed wire to a fused output on Lynx.</li>
                     <li><strong>Final Wiring Checks:</strong> Meticulously double-check ALL connections for tightness & polarity. Inspect wire routing for protection. Confirm correct fuses installed.</li>
@@ -464,7 +512,7 @@
                 <p>Systematic testing ensures correct and safe operation.</p>
 
                 <h2>A. Initial Power-Up Sequence</h2>
-                <ol class="list-decimal space-y-2">
+                <ol class="list-decimal space-y-2.5">
                     <li><strong>Final Visual Inspection:</strong> Check all wiring, connections, no loose tools.</li>
                     <li><strong>Power Up Batteries:</strong> Main disconnect OFF. DC load breakers OFF. Turn ON main disconnect. Check SmartShunt/Cerbo for battery voltage.</li>
                     <li><strong>Power Up DC System:</strong> Turn ON DC breakers one by one. Test each DC load.</li>
@@ -482,7 +530,7 @@
                 <p>On inverter power, test AC appliances. Monitor battery voltage, inverter load, battery discharge current. Do not exceed inverter rating.</p>
 
                 <h2>E. Testing Shore Power Passthrough and Charging</h2>
-                <ol class="list-decimal space-y-2">
+                <ol class="list-decimal space-y-2.5">
                     <li>MultiPlus to "Charger Only" or "On".</li>
                     <li>Connect shore power/start generator.</li>
                     <li>MultiPlus should detect AC input, pass through to AC panel.</li>
@@ -491,11 +539,14 @@
                 </ol>
 
                 <h2>F. Configuring Victron Components</h2>
-                 <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-200 my-4">
-                    <p class="font-semibold text-indigo-700"><span class="icon">⚙️</span>Configuration is Critical for LiFePO4!</p>
-                    <p class="text-indigo-600 text-sm">Use VictronConnect or GX Touch. Incorrect settings can damage batteries or reduce lifespan.</p>
+                 <div class="alert-box alert-info">
+                    <span class="icon">⚙️</span>
+                    <div>
+                        <p class="font-semibold">Configuration is Critical for LiFePO4!</p>
+                        <p class="text-sm mb-0">Use VictronConnect or GX Touch. Incorrect settings can damage batteries or reduce lifespan.</p>
+                    </div>
                 </div>
-                <ul class="list-disc space-y-1">
+                <ul class="list-disc space-y-1.5">
                     <li><strong>Battery Settings (MultiPlus & MPPT):</strong> Correct total capacity, "LiFePO4" chemistry, precise charge voltages (Bulk/Absorb, Float) per SoK specs. If CANbus connected, BMS may control this.</li>
                     <li><strong>MultiPlus Settings:</strong> Input current limits for shore, PowerAssist, UPS function.</li>
                     <li><strong>SmartShunt Settings:</strong> Match battery capacity.</li>
@@ -511,7 +562,7 @@
                 <p>This section provides a summary of estimated costs and tips for sourcing materials.</p>
 
                 <h2>A. Detailed Cost Breakdown</h2>
-                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
                     <div class="lg:col-span-3">
                         <h3>Table 7: Budget / Cost Estimation Summary</h3>
                         <div class="table-container my-4">
@@ -529,7 +580,7 @@
                                     <tr><td>Miscellaneous</td><td>Loom, Labels, Terminals</td><td>$50 - $100</td></tr>
                                     <tr class="font-semibold bg-slate-100"><td>SUBTOTAL (Parts)</td><td></td><td>$5646 - $7890</td></tr>
                                     <tr><td>Tools (if purchased)</td><td>Hydraulic Crimper, MC4 Tool, etc.</td><td>$100 - $300</td></tr>
-                                    <tr class="font-bold text-lg bg-indigo-100 text-indigo-800"><td>ESTIMATED PROJECT TOTAL</td><td></td><td>$5746 - $8190</td></tr>
+                                    <tr class="font-bold text-lg bg-teal-50 text-teal-800"><td>ESTIMATED PROJECT TOTAL</td><td></td><td>$5746 - $8190</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -537,7 +588,7 @@
                     </div>
                     <div class="lg:col-span-2 mt-6 lg:mt-12">
                         <h3 class="text-center lg:text-left">Cost Breakdown Chart</h3>
-                        <div class="chart-container bg-white p-4 rounded-lg shadow-lg border border-slate-200">
+                        <div class="chart-container bg-white p-4 rounded-lg shadow-md border border-slate-200">
                             <canvas id="costChart"></canvas>
                         </div>
                         <p class="text-center text-sm text-slate-500 mt-2">Visual representation of estimated parts cost distribution.</p>
@@ -546,7 +597,7 @@
 
 
                 <h2>B. Tips for Sourcing Materials Online</h2>
-                <ul class="list-disc space-y-1">
+                <ul class="list-disc space-y-1.5">
                     <li><strong>Compare Prices:</strong> Use multiple vendors (Amazon, InvertersRUs, Bay Marine Supply, Battle Born, ShopSolarKits, WireAndCableYourWay, Home Depot, Lowes).</li>
                     <li><strong>Check Shipping & Returns:</strong> Factor in costs for heavy items. Understand return policies.</li>
                     <li><strong>Order in Advance:</strong> Crucial for the 2-day install. Account for shipping/processing times.</li>
@@ -562,16 +613,22 @@
                 <p>Key considerations for safety, maintenance, and future planning.</p>
 
                 <h2>A. Safety Precautions Summary (Reiterate and Emphasize)</h2>
-                <ul class="list-disc space-y-1 text-rose-700 font-medium">
-                    <li><span class="icon">❗</span><strong>Electricity is Dangerous:</strong> Consult a qualified professional if uncertain.</li>
-                    <li><span class="icon">❗</span><strong>De-energize All Circuits:</strong> Verify OFF with a multimeter.</li>
-                    <li><span class="icon">❗</span><strong>Proper Fusing is Non-Negotiable:</strong> Protects wiring and components.</li>
-                    <li><span class="icon">❗</span><strong>Battery Safety:</strong> Avoid short circuits. Ensure BMS is functional.</li>
-                    <li><span class="icon">❗</span><strong>Roof Safety:</strong> Use caution, consider safety harnesses.</li>
-                </ul>
+                <div class="alert-box alert-critical">
+                    <span class="icon text-xl">❗</span>
+                    <div>
+                        <h3 class="font-semibold mt-0">Safety is Paramount!</h3>
+                        <ul class="list-disc space-y-1 text-sm mb-0">
+                            <li><strong>Electricity is Dangerous:</strong> Consult a qualified professional if uncertain.</li>
+                            <li><strong>De-energize All Circuits:</strong> Verify OFF with a multimeter.</li>
+                            <li><strong>Proper Fusing is Non-Negotiable:</strong> Protects wiring and components.</li>
+                            <li><strong>Battery Safety:</strong> Avoid short circuits. Ensure BMS is functional.</li>
+                            <li><strong>Roof Safety:</strong> Use caution, consider safety harnesses.</li>
+                        </ul>
+                    </div>
+                </div>
 
                 <h2>B. System Maintenance Recommendations</h2>
-                <ul class="list-disc space-y-1">
+                <ul class="list-disc space-y-1.5">
                     <li><strong>Connections:</strong> Inspect high-current connections for tightness/corrosion every 6-12 months.</li>
                     <li><strong>Solar Panels:</strong> Clean regularly to remove dirt/debris.</li>
                     <li><strong>Battery Terminals:</strong> Visual inspection.</li>
@@ -580,7 +637,7 @@
                 </ul>
 
                 <h2>C. Troubleshooting Common Issues</h2>
-                <ul class="list-disc space-y-1">
+                <ul class="list-disc space-y-1.5">
                     <li><strong>No DC Power:</strong> Check disconnect, main fuse, battery SoC, connections, DC breakers.</li>
                     <li><strong>No AC Power from Inverter:</strong> Check inverter ON, battery SoC/voltage, DC input fuse, fault codes, AC output breakers.</li>
                     <li><strong>Low Solar Charging:</strong> Check shading, panel cleanliness, PV wiring, MPPT settings, PV fuse/breaker.</li>
@@ -588,15 +645,19 @@
                 </ul>
 
                 <h2>D. Future Expansion Possibilities</h2>
-                <ul class="list-disc space-y-1">
+                <ul class="list-disc space-y-1.5">
                     <li><strong>Solar Array Expansion:</strong> Add panels if space/MPPT capacity allows (150/100 can handle >1200W). May need 2nd MPPT.</li>
                     <li><strong>Battery Bank Expansion:</strong> Add identical LiFePO4 batteries in parallel. Ensure charging system can handle it.</li>
                     <li><strong>Other Victron Accessories:</strong> DC-DC chargers (Orion-Tr Smart), sensors, etc.</li>
                 </ul>
                 
                 <h2>E. Disclaimer</h2>
-                <div class="bg-amber-50 p-4 rounded-lg border border-amber-300 my-4">
-                    <p class="text-sm text-amber-700"><span class="font-semibold">Disclaimer:</span> This guide provides recommendations based on user-supplied info and general best practices. The user is solely responsible for accurate interpretation and safe execution. Comply with local codes and safety standards. If unqualified or uncomfortable, seek professional help. No liability is assumed for damage, injury, or loss from using this information.</p>
+                <div class="alert-box alert-warning">
+                     <span class="icon">⚠️</span>
+                     <div>
+                        <p class="font-semibold">Disclaimer:</p>
+                        <p class="text-sm mb-0">This guide provides recommendations based on user-supplied info and general best practices. The user is solely responsible for accurate interpretation and safe execution. Comply with local codes and safety standards. If unqualified or uncomfortable, seek professional help. No liability is assumed for damage, injury, or loss from using this information.</p>
+                    </div>
                 </div>
             </section>
 
@@ -604,11 +665,11 @@
                 <h1>Conclusion and Recommendations</h1>
                 <p>This report outlines a comprehensive plan for a Victron-focused off-grid power system overhaul for your 1980 Bluebird Wanderlodge, excluding AC units from off-grid loads. Revised daily energy use is ~171 Ah (design target ~205 Ah).</p>
 
-                <h2 class="text-indigo-700">Key Recommendations:</h2>
-                <ol class="list-decimal space-y-3 font-medium">
+                <h2 class="text-teal-700">Key Recommendations:</h2>
+                <ol class="list-decimal space-y-3.5 font-medium">
                     <li class="text-rose-600">Prioritize Battery Fitment Verification: <span class="font-normal text-slate-600">The reported 5" compartment opening restriction is critical. Re-measure before any battery purchase.</span></li>
                     <li>System Sizing:
-                        <ul class="list-disc list-inside font-normal text-slate-600 space-y-1 ml-5">
+                        <ul class="list-disc list-inside font-normal text-slate-600 space-y-1.5 ml-5">
                             <li>Battery Bank: ~515-600 Ah LiFePO4 (e.g., 2x SoK SK12V314PH if they fit).</li>
                             <li>Solar Array: 1000W-1200W (e.g., 3x 400W panels). Consider tilt mounts.</li>
                             <li>Charge Controller: Victron SmartSolar MPPT 150/100-Tr.</li>
@@ -628,6 +689,7 @@
     <script>
         const navLinks = document.querySelectorAll('.nav-link');
         const contentSections = document.querySelectorAll('.content-section');
+        let currentChart = null;
 
         function showSection(targetId) {
             contentSections.forEach(section => {
@@ -647,27 +709,12 @@
 
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
-                e.preventDefault(); // Prevent default anchor behavior
+                e.preventDefault(); 
                 const targetId = link.dataset.target;
                 showSection(targetId);
-                // Optional: Update URL hash for bookmarking/history (basic)
-                // window.location.hash = targetId;
             });
         });
         
-        // Optional: Handle initial section based on URL hash
-        // function showInitialSection() {
-        //    const hash = window.location.hash.substring(1);
-        //    if (hash && document.getElementById(hash)) {
-        //        showSection(hash);
-        //    } else if (navLinks.length > 0) {
-        //        showSection(navLinks[0].dataset.target);
-        //    }
-        // }
-        // window.addEventListener('DOMContentLoaded', showInitialSection);
-
-
-        // Show the first section by default if no hash
         if (navLinks.length > 0 && !window.location.hash) {
             showSection(navLinks[0].dataset.target);
         } else if (window.location.hash) {
@@ -680,8 +727,6 @@
             }
         }
 
-
-        // Chart.js for Cost Breakdown
         const costData = {
             labels: [
                 'Batteries', 
@@ -698,32 +743,34 @@
                 label: 'Estimated Cost Distribution',
                 data: [2108, 750, 1039, 483, 617, 345, 700, 150, 75], 
                 backgroundColor: [
-                    '#3b82f6', // blue-500
-                    '#60a5fa', // blue-400
-                    '#2563eb', // blue-600
-                    '#1d4ed8', // blue-700
-                    '#4f46e5', // indigo-600
-                    '#6366f1', // indigo-500
-                    '#818cf8', // indigo-400
-                    '#a5b4fc', // indigo-300
-                    '#c7d2fe'  // indigo-200
+                    '#0d9488', // teal-600
+                    '#0f766e', // teal-700
+                    '#115e59', // teal-800
+                    '#134e4a', // teal-900
+                    '#06b6d4', // cyan-500
+                    '#0891b2', // cyan-600
+                    '#0e7490', // cyan-700
+                    '#155e75', // cyan-800
+                    '#ccfbf1'  // teal-100
                 ],
-                borderColor: '#ffffff', // white
+                borderColor: '#f8fafc', // slate-50 (background)
                 borderWidth: 2,
                 hoverOffset: 8,
-                hoverBorderColor: '#e5e7eb' // gray-200
+                hoverBorderColor: '#e2e8f0' // slate-200
             }]
         };
 
         const costChartConfig = {
-            type: 'doughnut', // Changed to doughnut for a more modern feel
+            type: 'doughnut',
             data: costData,
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 animation: {
                     animateScale: true,
-                    animateRotate: true
+                    animateRotate: true,
+                    duration: 1200,
+                    easing: 'easeInOutQuart'
                 },
                 plugins: {
                     legend: {
@@ -731,10 +778,11 @@
                         labels: {
                             font: {
                                 size: 11,
-                                family: 'Inter, sans-serif'
+                                family: 'Inter, sans-serif',
+                                weight: 500
                             },
                             color: '#475569', // slate-600
-                            padding: 15,
+                            padding: 18,
                             usePointStyle: true,
                             pointStyle: 'rectRounded',
                             generateLabels: function(chart) {
@@ -766,12 +814,14 @@
                         display: false,
                     },
                     tooltip: {
+                        enabled: true,
                         backgroundColor: '#1e293b', // slate-800
-                        titleFont: { family: 'Inter, sans-serif', size: 14, weight: 'bold' },
+                        titleFont: { family: 'Inter, sans-serif', size: 14, weight: '600' },
                         bodyFont: { family: 'Inter, sans-serif', size: 12 },
                         padding: 12,
-                        cornerRadius: 8,
-                        boxPadding: 4,
+                        cornerRadius: 6,
+                        boxPadding: 5,
+                        caretSize: 6,
                         callbacks: {
                              label: function(context) {
                                 const fullLabel = context.chart.data.labels[context.dataIndex]; 
@@ -787,13 +837,13 @@
                         }
                     }
                 },
-                cutout: '60%', // Makes it a doughnut chart
+                cutout: '65%', 
                 layout: {
                     padding: {
-                        top: 10,
-                        bottom: 10,
-                        left: 10,
-                        right: 10
+                        top: 5,
+                        bottom: 5,
+                        left: 5,
+                        right: 5
                     }
                 }
             }
@@ -801,7 +851,10 @@
         
         const costChartCanvas = document.getElementById('costChart');
         if (costChartCanvas) {
-             new Chart(costChartCanvas, costChartConfig);
+            if(currentChart) {
+                currentChart.destroy();
+            }
+             currentChart = new Chart(costChartCanvas, costChartConfig);
         }
 
     </script>
